@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Baytul Ilm Academy</string>
+
+    <string name="app_slogan">
+        Seeking Knowledge with Authentic Sources
+    </string>
+
+    <string name="welcome_back">
+        Welcome Back
+    </string>
+
+    <string name="login">Login</string>
+
+    <string name="register">Create Account</string>
+
+    <string name="forgot_password">Forgot Password?</string>
+
+    <string name="email">Email</string>
+
+    <string name="password">Password</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>

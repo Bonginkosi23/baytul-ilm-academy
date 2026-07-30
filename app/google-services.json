@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "311412037266",
+    "firebase_url": "https://baytul-ilm-academy-default-rtdb.firebaseio.com",
+    "project_id": "baytul-ilm-academy",
+    "storage_bucket": "baytul-ilm-academy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311412037266:android:30018e53a575f81322784b",
+        "android_client_info": {
+          "package_name": "com.example.baytul_ilm_academy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5PVKE9jRv-4vR4WykZhvioKpf8foD9G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:311412037266:android:1c3696de3d3fdfb022784b",
+        "android_client_info": {
+          "package_name": "com.mabuzagroup.baytulilmacademy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5PVKE9jRv-4vR4WykZhvioKpf8foD9G0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
