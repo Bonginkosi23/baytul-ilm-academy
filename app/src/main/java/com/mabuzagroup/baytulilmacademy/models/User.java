@@ -8,6 +8,8 @@ public class User {
     private String role;
     private String profileImage;
     private long joinedAt;
+    private boolean active;
+    private String accountType;
 
     public User() {
         // Required for Firestore
@@ -18,7 +20,7 @@ public class User {
                 String email,
                 String role,
                 String profileImage,
-                Long joinedAt) {
+                long joinedAt) {
 
         this.uid = uid;
         this.fullName = fullName;
@@ -26,6 +28,8 @@ public class User {
         this.role = role;
         this.profileImage = profileImage;
         this.joinedAt = joinedAt;
+        this.active = true;
+        this.accountType = "email";
     }
 
     public String getUid() {
@@ -68,11 +72,27 @@ public class User {
         this.profileImage = profileImage;
     }
 
-    public Long getJoineAt(Long joinedAt) {
+    public long getJoinedAt() {
         return joinedAt;
     }
 
-    public void setJoinedAt(Long joinedAt) {
+    public void setJoinedAt(long joinedAt) {
         this.joinedAt = joinedAt;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 }

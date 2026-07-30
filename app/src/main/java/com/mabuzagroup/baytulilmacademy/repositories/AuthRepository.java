@@ -44,4 +44,13 @@ public class AuthRepository {
                 });
 
     }
+
+    public String getCurrentUserId() {
+
+        if (auth.getCurrentUser() != null) {
+            return auth.getCurrentUser().getUid();
+        }
+
+        return null;
+    }
 }
