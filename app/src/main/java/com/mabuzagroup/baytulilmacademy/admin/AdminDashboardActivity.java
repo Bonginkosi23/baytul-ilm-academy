@@ -30,11 +30,20 @@ public class AdminDashboardActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_dashboard);
 
-        MaterialCardView cardCategories = findViewById(R.id.cardCategories);
         MaterialCardView cardLogout = findViewById(R.id.cardLogout);
 
-        cardCategories.setOnClickListener(v ->
-                startActivity(new Intent(this, AddCategoryActivity.class)));
+        MaterialCardView cardViewCategories =
+                findViewById(R.id.cardCategories);
+
+        cardViewCategories.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                AdminDashboardActivity.this,
+                                CategoryListActivity.class
+                        ))
+
+        );
 
         cardLogout.setOnClickListener(v -> {
 

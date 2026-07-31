@@ -4,6 +4,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.mabuzagroup.baytulilmacademy.constants.FirestoreConstants;
 import com.mabuzagroup.baytulilmacademy.models.Category;
 
+import java.util.List;
+
 public class CategoryRepository {
 
     private final FirebaseFirestore firestore;
@@ -32,6 +34,27 @@ public class CategoryRepository {
         return firestore.collection(FirestoreConstants.CATEGORIES)
                 .document()
                 .getId();
+    }
+
+    public interface CategoryListCallback {
+        void onSuccess(List<Category> categories);
+        void onFailure(String message);
+    }
+
+    public void getCategories(CategoryListCallback callback) {
+
+        firestore.collection(FirestoreConstants.CATEGORIES)
+                .whereEqualTo("active", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    List<Category> categories = queryDocumentSnapshots.toObjects(Category.class);
+
+                    callback.onSuccess(categories);
+
+                })
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
     }
 
 }
