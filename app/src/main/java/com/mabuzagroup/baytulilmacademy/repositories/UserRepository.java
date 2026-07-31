@@ -26,4 +26,34 @@ public class UserRepository {
                 .addOnFailureListener(e ->
                         callback.onFailure(e.getMessage()));
     }
+
+    public void getUserById(String uid, UserDataCallback callback) {
+
+        firestore.collection(FirestoreConstants.USERS)
+                .document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+
+                    if (documentSnapshot.exists()) {
+
+                        User user = documentSnapshot.toObject(User.class);
+
+                        callback.onSuccess(user);
+
+                    } else {
+
+                        callback.onFailure("User profile not found.");
+
+                    }
+
+                })
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+
+    }
+
+    public interface UserDataCallback {
+        void onSuccess(User user);
+        void onFailure(String message);
+    }
 }

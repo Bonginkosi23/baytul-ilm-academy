@@ -16,7 +16,13 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mabuzagroup.baytulilmacademy.R;
 import com.mabuzagroup.baytulilmacademy.activities.MainActivity;
-import com.mabuzagroup.baytulilmacademy.firebase.FirebaseManager;
+
+import com.mabuzagroup.baytulilmacademy.constants.UserRoles;
+import com.mabuzagroup.baytulilmacademy.models.User;
+import com.mabuzagroup.baytulilmacademy.repositories.AuthRepository;
+import com.mabuzagroup.baytulilmacademy.repositories.UserRepository;
+import com.mabuzagroup.baytulilmacademy.student.StudentHomeActivity;
+import com.mabuzagroup.baytulilmacademy.admin.AdminDashboardActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,7 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnLogin;
     private ProgressBar progressBar;
 
-    private FirebaseManager firebaseManager;
+    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +50,8 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         progressBar = findViewById(R.id.progressBar);
 
-        firebaseManager = FirebaseManager.getInstance();
+        authRepository = new AuthRepository();
+        userRepository = new UserRepository();
 
         btnLogin.setOnClickListener(v -> loginUser());
     }
@@ -73,24 +81,77 @@ public class LoginActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        firebaseManager.login(email, password, task -> {
+        authRepository.loginUser(email, password, new AuthRepository.AuthCallback() {
 
-            progressBar.setVisibility(View.GONE);
+            @Override
+            public void onSuccess() {
 
-            if (task.isSuccessful()) {
+                String uid = authRepository.getCurrentUserId();
 
-                Toast.makeText(this,
-                        "Welcome!",
-                        Toast.LENGTH_SHORT).show();
+                if (uid == null) {
 
-                startActivity(new Intent(this, MainActivity.class));
-                finish();
+                    progressBar.setVisibility(View.GONE);
 
-            } else {
+                    Toast.makeText(LoginActivity.this,
+                            "User not found.",
+                            Toast.LENGTH_LONG).show();
 
-                Toast.makeText(this,
-                        task.getException().getMessage(),
+                    return;
+                }
+
+                userRepository.getUserById(uid, new UserRepository.UserDataCallback() {
+
+                    @Override
+                    public void onSuccess(User user) {
+
+                        progressBar.setVisibility(View.GONE);
+
+                        if (user == null) {
+
+                            Toast.makeText(LoginActivity.this,
+                                    "User profile not found.",
+                                    Toast.LENGTH_LONG).show();
+
+                            return;
+                        }
+
+                        if (UserRoles.ADMIN.equals(user.getRole())) {
+
+                            startActivity(new Intent(LoginActivity.this,
+                                    AdminDashboardActivity.class));
+
+                        } else {
+
+                            startActivity(new Intent(LoginActivity.this,
+                                    StudentHomeActivity.class));
+                        }
+
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+
+                        progressBar.setVisibility(View.GONE);
+
+                        Toast.makeText(LoginActivity.this,
+                                message,
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                });
+
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+                progressBar.setVisibility(View.GONE);
+
+                Toast.makeText(LoginActivity.this,
+                        message,
                         Toast.LENGTH_LONG).show();
+
             }
 
         });

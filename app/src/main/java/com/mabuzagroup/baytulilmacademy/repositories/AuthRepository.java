@@ -45,6 +45,27 @@ public class AuthRepository {
 
     }
 
+    public void loginUser(String email,
+                          String password,
+                          AuthCallback callback) {
+
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+
+                    if (task.isSuccessful()) {
+                        callback.onSuccess();
+                    } else {
+
+                        callback.onFailure(
+                                task.getException() != null
+                                        ? task.getException().getMessage()
+                                        : "Login failed"
+                        );
+                    }
+
+                });
+    }
+
     public String getCurrentUserId() {
 
         if (auth.getCurrentUser() != null) {

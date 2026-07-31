@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaytulIlmAcademy">
         <activity
+            android:name=".student.StudentHomeActivity"
+            android:exported="false" />
+        <activity
             android:name=".admin.AdminDashboardActivity"
             android:exported="false" />
         <activity
