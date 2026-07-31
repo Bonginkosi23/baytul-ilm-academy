@@ -10,6 +10,18 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.mabuzagroup.baytulilmacademy.R;
 
+import android.content.Intent;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
+
+import android.content.Intent;
+
+import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
+
 public class AdminDashboardActivity extends AppCompatActivity {
 
     @Override
@@ -17,10 +29,22 @@ public class AdminDashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_dashboard);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        MaterialCardView cardCategories = findViewById(R.id.cardCategories);
+        MaterialCardView cardLogout = findViewById(R.id.cardLogout);
+
+        cardCategories.setOnClickListener(v ->
+                startActivity(new Intent(this, AddCategoryActivity.class)));
+
+        cardLogout.setOnClickListener(v -> {
+
+            FirebaseAuth.getInstance().signOut();
+
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+
+            finish();
         });
     }
 }

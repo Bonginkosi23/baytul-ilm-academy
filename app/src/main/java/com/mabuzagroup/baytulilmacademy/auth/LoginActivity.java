@@ -108,6 +108,8 @@ public class LoginActivity extends AppCompatActivity {
 
                         if (user == null) {
 
+                            Toast.makeText(LoginActivity.this, "Opening Login", Toast.LENGTH_SHORT).show();
+
                             Toast.makeText(LoginActivity.this,
                                     "User profile not found.",
                                     Toast.LENGTH_LONG).show();
@@ -116,11 +118,13 @@ public class LoginActivity extends AppCompatActivity {
                         }
 
                         if (UserRoles.ADMIN.equals(user.getRole())) {
+                            Toast.makeText(LoginActivity.this, "Opening Admin Dashboard", Toast.LENGTH_SHORT).show();
 
                             startActivity(new Intent(LoginActivity.this,
                                     AdminDashboardActivity.class));
 
                         } else {
+                            Toast.makeText(LoginActivity.this, "Opening Student Home", Toast.LENGTH_SHORT).show();
 
                             startActivity(new Intent(LoginActivity.this,
                                     StudentHomeActivity.class));

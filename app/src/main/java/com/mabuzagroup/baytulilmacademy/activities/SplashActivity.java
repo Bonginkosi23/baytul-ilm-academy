@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,6 +40,7 @@ public class SplashActivity extends AppCompatActivity {
             String uid = authRepository.getCurrentUserId();
 
             if (uid == null) {
+                Toast.makeText(this, "Opening Login", Toast.LENGTH_SHORT).show();
 
                 startActivity(new Intent(
                         SplashActivity.this,
@@ -55,6 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                         public void onSuccess(User user) {
 
                             if (user == null) {
+                                Toast.makeText(SplashActivity.this, "Opening Login", Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(
                                         SplashActivity.this,
@@ -65,12 +68,14 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                             if (UserRoles.ADMIN.equals(user.getRole())) {
+                                Toast.makeText(SplashActivity.this, "Opening Admin Dashboard", Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(
                                         SplashActivity.this,
                                         AdminDashboardActivity.class));
 
                             } else {
+                                Toast.makeText(SplashActivity.this, "Opening Student Home", Toast.LENGTH_SHORT).show();
 
                                 startActivity(new Intent(
                                         SplashActivity.this,
