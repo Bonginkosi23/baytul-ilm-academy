@@ -13,28 +13,83 @@ import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
 import com.mabuzagroup.baytulilmacademy.R;
 import com.mabuzagroup.baytulilmacademy.auth.RegisterActivity;
 
+import com.mabuzagroup.baytulilmacademy.admin.AdminDashboardActivity;
+import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
+import com.mabuzagroup.baytulilmacademy.constants.UserRoles;
+import com.mabuzagroup.baytulilmacademy.models.User;
+import com.mabuzagroup.baytulilmacademy.repositories.AuthRepository;
+import com.mabuzagroup.baytulilmacademy.repositories.UserRepository;
+import com.mabuzagroup.baytulilmacademy.student.StudentHomeActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
-    private FirebaseAuth mAuth;
+    private AuthRepository authRepository;
+    private UserRepository userRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        mAuth = FirebaseAuth.getInstance();
+        authRepository = new AuthRepository();
+        userRepository = new UserRepository();
 
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
 
-            FirebaseUser currentUser = mAuth.getCurrentUser();
+            String uid = authRepository.getCurrentUserId();
 
-            if (currentUser != null) {
-                startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            } else {
-                startActivity(new Intent(SplashActivity.this, RegisterActivity.class));
+            if (uid == null) {
+
+                startActivity(new Intent(
+                        SplashActivity.this,
+                        LoginActivity.class));
+
+                finish();
+                return;
             }
 
-            finish();
+            userRepository.getUserById(uid,
+                    new UserRepository.UserDataCallback() {
+
+                        @Override
+                        public void onSuccess(User user) {
+
+                            if (user == null) {
+
+                                startActivity(new Intent(
+                                        SplashActivity.this,
+                                        LoginActivity.class));
+
+                                finish();
+                                return;
+                            }
+
+                            if (UserRoles.ADMIN.equals(user.getRole())) {
+
+                                startActivity(new Intent(
+                                        SplashActivity.this,
+                                        AdminDashboardActivity.class));
+
+                            } else {
+
+                                startActivity(new Intent(
+                                        SplashActivity.this,
+                                        StudentHomeActivity.class));
+                            }
+
+                            finish();
+                        }
+
+                        @Override
+                        public void onFailure(String message) {
+
+                            startActivity(new Intent(
+                                    SplashActivity.this,
+                                    LoginActivity.class));
+
+                            finish();
+                        }
+                    });
 
         }, 2000);
     }
