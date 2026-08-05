@@ -1,32 +1,29 @@
 package com.mabuzagroup.baytulilmacademy.models;
 
-public class Course {
+public class Module {
 
     private String id;
-    private String categoryId;
+    private String courseId;
     private String title;
     private String description;
-    private String thumbnailUrl;
     private boolean active;
     private long createdAt;
 
-    public Course() {
+    public Module() {
         // Required for Firestore
     }
 
-    public Course(String id,
-                  String categoryId,
+    public Module(String id,
+                  String courseId,
                   String title,
                   String description,
-                  String thumbnailUrl,
                   boolean active,
                   long createdAt) {
 
         this.id = id;
-        this.categoryId = categoryId;
+        this.courseId = courseId;
         this.title = title;
         this.description = description;
-        this.thumbnailUrl = thumbnailUrl;
         this.active = active;
         this.createdAt = createdAt;
     }
@@ -39,12 +36,12 @@ public class Course {
         this.id = id;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public String getCourseId() {
+        return courseId;
     }
 
-    public void setCategoryId(String categoryId) {
-        this.categoryId = categoryId;
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
     }
 
     public String getTitle() {
@@ -61,14 +58,6 @@ public class Course {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
     }
 
     public boolean isActive() {

@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BaytulIlmAcademy">
         <activity
+            android:name=".admin.ModuleListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".admin.AddModuleActivity"
+            android:exported="false" />
+        <activity android:name=".admin.LessonListActivity" />
+        <activity
+            android:name=".admin.AddLessonActivity"
+            android:exported="false" />
+        <activity
             android:name=".admin.AddCourseActivity"
             android:exported="false" />
         <activity

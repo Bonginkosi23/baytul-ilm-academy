@@ -12,6 +12,9 @@ import com.mabuzagroup.baytulilmacademy.adapters.CategoryAdapter;
 import com.mabuzagroup.baytulilmacademy.models.Category;
 import com.mabuzagroup.baytulilmacademy.repositories.CategoryRepository;
 
+import android.content.Intent;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +35,19 @@ public class CategoryListActivity extends AppCompatActivity {
 
         recyclerCategories = findViewById(R.id.recyclerCategories);
 
+        FloatingActionButton fabAddCategory =
+                findViewById(R.id.fabAddCategory);
+
+        fabAddCategory.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                CategoryListActivity.this,
+                                AddCategoryActivity.class
+                        ))
+
+        );
+
         categoryList = new ArrayList<>();
 
         adapter = new CategoryAdapter(categoryList);
@@ -43,7 +59,12 @@ public class CategoryListActivity extends AppCompatActivity {
 
         repository = new CategoryRepository();
 
-        loadCategories();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCategories();   // CategoryListActivity
     }
 
     private void loadCategories() {

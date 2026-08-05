@@ -136,9 +136,7 @@ public class AddCourseActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT
                 ).show();
 
-                etCourseTitle.setText("");
-                etCourseDescription.setText("");
-                spCategory.setSelection(0);
+                finish();
             }
 
             @Override

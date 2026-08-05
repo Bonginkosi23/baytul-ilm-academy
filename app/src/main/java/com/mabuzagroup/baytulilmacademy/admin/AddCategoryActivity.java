@@ -85,10 +85,7 @@ public class AddCategoryActivity extends AppCompatActivity {
                                 "Category saved successfully!",
                                 Toast.LENGTH_SHORT).show();
 
-                        etCategoryName.setText("");
-                        etDescription.setText("");
-
-                        etCategoryName.requestFocus();
+                        finish();
                     }
 
                     @Override

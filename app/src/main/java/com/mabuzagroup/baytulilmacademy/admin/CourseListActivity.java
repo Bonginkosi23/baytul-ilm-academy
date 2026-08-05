@@ -1,26 +1,94 @@
 package com.mabuzagroup.baytulilmacademy.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mabuzagroup.baytulilmacademy.R;
+import com.mabuzagroup.baytulilmacademy.adapters.CourseAdapter;
+import com.mabuzagroup.baytulilmacademy.models.Course;
+import com.mabuzagroup.baytulilmacademy.repositories.CourseRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CourseListActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerCourses;
+
+    private CourseAdapter adapter;
+
+    private List<Course> courseList;
+
+    private CourseRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_course_list);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        recyclerCourses = findViewById(R.id.recyclerCourses);
+
+        FloatingActionButton fabAddCourse =
+                findViewById(R.id.fabAddCourse);
+
+        fabAddCourse.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                CourseListActivity.this,
+                                AddCourseActivity.class
+                        ))
+
+        );
+
+        courseList = new ArrayList<>();
+
+        adapter = new CourseAdapter(courseList);
+
+        recyclerCourses.setLayoutManager(
+                new LinearLayoutManager(this));
+
+        recyclerCourses.setAdapter(adapter);
+
+        repository = new CourseRepository();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCourses();      // CourseListActivity
+    }
+
+    private void loadCourses() {
+
+        repository.getCourses(new CourseRepository.CourseListCallback() {
+
+            @Override
+            public void onSuccess(List<Course> courses) {
+
+                courseList.clear();
+
+                courseList.addAll(courses);
+
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(String message) {
+
+                Toast.makeText(
+                        CourseListActivity.this,
+                        message,
+                        Toast.LENGTH_LONG
+                ).show();
+            }
         });
     }
 }

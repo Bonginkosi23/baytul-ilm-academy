@@ -6,6 +6,7 @@ public final class FirestoreConstants {
 
     public static final String USERS = "users";
     public static final String COURSES = "courses";
+    public static final String MODULES = "modules";
     public static final String LESSONS = "lessons";
     public static final String QUIZZES = "quizzes";
     public static final String CATEGORIES = "categories";

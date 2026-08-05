@@ -2,55 +2,55 @@ package com.mabuzagroup.baytulilmacademy.repositories;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.mabuzagroup.baytulilmacademy.constants.FirestoreConstants;
-import com.mabuzagroup.baytulilmacademy.models.Lesson;
+import com.mabuzagroup.baytulilmacademy.models.Module;
 
 import java.util.List;
 
-public class LessonRepository {
+public class ModuleRepository {
 
     private final FirebaseFirestore firestore;
 
-    public LessonRepository() {
+    public ModuleRepository() {
         firestore = FirebaseFirestore.getInstance();
     }
 
-    public interface LessonCallback {
+    public interface ModuleCallback {
         void onSuccess();
         void onFailure(String message);
     }
 
-    public interface LessonListCallback {
-        void onSuccess(List<Lesson> lessons);
+    public interface ModuleListCallback {
+        void onSuccess(List<Module> modules);
         void onFailure(String message);
     }
 
-    public String generateLessonId() {
-        return firestore.collection(FirestoreConstants.LESSONS)
+    public String generateModuleId() {
+        return firestore.collection(FirestoreConstants.MODULES)
                 .document()
                 .getId();
     }
 
-    public void saveLesson(Lesson lesson, LessonCallback callback) {
+    public void saveModule(Module module, ModuleCallback callback) {
 
-        firestore.collection(FirestoreConstants.LESSONS)
-                .document(lesson.getId())
-                .set(lesson)
+        firestore.collection(FirestoreConstants.MODULES)
+                .document(module.getId())
+                .set(module)
                 .addOnSuccessListener(unused -> callback.onSuccess())
                 .addOnFailureListener(e ->
                         callback.onFailure(e.getMessage()));
     }
 
-    public void getLessons(LessonListCallback callback) {
+    public void getModules(ModuleListCallback callback) {
 
-        firestore.collection(FirestoreConstants.LESSONS)
+        firestore.collection(FirestoreConstants.MODULES)
                 .whereEqualTo("active", true)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
 
-                    List<Lesson> lessons =
-                            queryDocumentSnapshots.toObjects(Lesson.class);
+                    List<Module> modules =
+                            queryDocumentSnapshots.toObjects(Module.class);
 
-                    callback.onSuccess(lessons);
+                    callback.onSuccess(modules);
 
                 })
                 .addOnFailureListener(e ->

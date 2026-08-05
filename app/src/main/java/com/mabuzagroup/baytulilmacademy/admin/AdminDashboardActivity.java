@@ -2,6 +2,7 @@ package com.mabuzagroup.baytulilmacademy.admin;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -42,7 +43,33 @@ public class AdminDashboardActivity extends AppCompatActivity {
                 startActivity(
                         new Intent(
                                 AdminDashboardActivity.this,
-                                AddCourseActivity.class
+                                CourseListActivity.class
+                        ))
+
+        );
+
+        MaterialCardView cardLessons =
+                findViewById(R.id.cardLessons);
+
+        cardLessons.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                AdminDashboardActivity.this,
+                                LessonListActivity.class
+                        ))
+
+        );
+
+        MaterialCardView cardModules =
+                findViewById(R.id.cardModules);
+
+        cardModules.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                AdminDashboardActivity.this,
+                                ModuleListActivity.class
                         ))
 
         );
