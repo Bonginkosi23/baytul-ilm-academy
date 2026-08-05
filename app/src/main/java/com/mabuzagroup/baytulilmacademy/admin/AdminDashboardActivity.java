@@ -1,25 +1,14 @@
 package com.mabuzagroup.baytulilmacademy.admin;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.mabuzagroup.baytulilmacademy.R;
-
-import android.content.Intent;
-
-import com.google.android.material.button.MaterialButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
-
-import android.content.Intent;
 
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.mabuzagroup.baytulilmacademy.R;
 import com.mabuzagroup.baytulilmacademy.auth.LoginActivity;
 
 public class AdminDashboardActivity extends AppCompatActivity {
@@ -41,6 +30,19 @@ public class AdminDashboardActivity extends AppCompatActivity {
                         new Intent(
                                 AdminDashboardActivity.this,
                                 CategoryListActivity.class
+                        ))
+
+        );
+
+        MaterialCardView cardCourses =
+                findViewById(R.id.cardCourses);
+
+        cardCourses.setOnClickListener(v ->
+
+                startActivity(
+                        new Intent(
+                                AdminDashboardActivity.this,
+                                AddCourseActivity.class
                         ))
 
         );
