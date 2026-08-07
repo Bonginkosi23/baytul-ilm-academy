@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mabuzagroup.baytulilmacademy.R;
@@ -49,7 +50,75 @@ public class CourseListActivity extends AppCompatActivity {
 
         courseList = new ArrayList<>();
 
-        adapter = new CourseAdapter(courseList);
+        adapter = new CourseAdapter(
+
+                courseList,
+
+                new CourseAdapter.OnCourseActionListener() {
+
+                    @Override
+                    public void onEdit(Course course) {
+
+                        Intent intent = new Intent(
+                                CourseListActivity.this,
+                                EditCourseActivity.class
+                        );
+
+                        intent.putExtra("courseId", course.getId());
+                        intent.putExtra("categoryId", course.getCategoryId());
+                        intent.putExtra("courseTitle", course.getTitle());
+                        intent.putExtra("courseDescription", course.getDescription());
+                        intent.putExtra("thumbnailUrl", course.getThumbnailUrl());
+                        intent.putExtra("createdAt", course.getCreatedAt());
+
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onDelete(Course course) {
+
+                        new AlertDialog.Builder(CourseListActivity.this)
+                                .setTitle("Delete Course")
+                                .setMessage("Are you sure you want to delete \"" +
+                                        course.getTitle() + "\"?")
+                                .setPositiveButton("Delete", (dialog, which) ->
+
+                                        repository.deleteCourse(
+                                                course.getId(),
+
+                                                new CourseRepository.CourseCallback() {
+
+                                                    @Override
+                                                    public void onSuccess() {
+
+                                                        Toast.makeText(
+                                                                CourseListActivity.this,
+                                                                "Course deleted successfully!",
+                                                                Toast.LENGTH_SHORT
+                                                        ).show();
+
+                                                        loadCourses();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(String message) {
+
+                                                        Toast.makeText(
+                                                                CourseListActivity.this,
+                                                                message,
+                                                                Toast.LENGTH_LONG
+                                                        ).show();
+                                                    }
+                                                })
+
+                                )
+
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    }
+                }
+
+        );
 
         recyclerCourses.setLayoutManager(
                 new LinearLayoutManager(this));

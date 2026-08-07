@@ -3,10 +3,13 @@ package com.mabuzagroup.baytulilmacademy.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.widget.PopupMenu;
 
 import com.mabuzagroup.baytulilmacademy.R;
 import com.mabuzagroup.baytulilmacademy.models.Module;
@@ -15,10 +18,23 @@ import java.util.List;
 
 public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleViewHolder> {
 
-    private final List<Module> moduleList;
+    public interface OnModuleActionListener {
 
-    public ModuleAdapter(List<Module> moduleList) {
+        void onEdit(Module module);
+
+        void onDelete(Module module);
+
+    }
+
+    private final List<Module> moduleList;
+    private final OnModuleActionListener listener;
+
+    public ModuleAdapter(
+            List<Module> moduleList,
+            OnModuleActionListener listener) {
+
         this.moduleList = moduleList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +54,33 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
 
         holder.tvTitle.setText(module.getTitle());
         holder.tvDescription.setText(module.getDescription());
+
+        holder.btnMenu.setOnClickListener(v -> {
+
+            PopupMenu popupMenu =
+                    new PopupMenu(v.getContext(), holder.btnMenu);
+
+            popupMenu.inflate(R.menu.item_options_menu);
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+
+                if (item.getItemId() == R.id.actionEdit) {
+
+                    listener.onEdit(module);
+                    return true;
+
+                } else if (item.getItemId() == R.id.actionDelete) {
+
+                    listener.onDelete(module);
+                    return true;
+                }
+
+                return false;
+            });
+
+            popupMenu.show();
+
+        });
     }
 
     @Override
@@ -47,6 +90,8 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
 
     static class ModuleViewHolder extends RecyclerView.ViewHolder {
 
+        ImageButton btnMenu;
+
         TextView tvTitle;
         TextView tvDescription;
 
@@ -55,6 +100,7 @@ public class ModuleAdapter extends RecyclerView.Adapter<ModuleAdapter.ModuleView
 
             tvTitle = itemView.findViewById(R.id.tvModuleTitle);
             tvDescription = itemView.findViewById(R.id.tvModuleDescription);
+            btnMenu = itemView.findViewById(R.id.btnMenu);
         }
     }
 }

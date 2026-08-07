@@ -40,6 +40,30 @@ public class CourseRepository {
                         callback.onFailure(e.getMessage()));
     }
 
+    public void updateCourse(Course course,
+                             CourseCallback callback) {
+
+        firestore.collection(FirestoreConstants.COURSES)
+                .document(course.getId())
+                .set(course)
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
+    public void deleteCourse(String courseId,
+                             CourseCallback callback) {
+
+        firestore.collection(FirestoreConstants.COURSES)
+                .document(courseId)
+                .delete()
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
     public void getCourses(CourseListCallback callback) {
 
         firestore.collection(FirestoreConstants.COURSES)

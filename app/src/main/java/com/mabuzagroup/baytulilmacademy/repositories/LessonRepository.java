@@ -40,6 +40,30 @@ public class LessonRepository {
                         callback.onFailure(e.getMessage()));
     }
 
+    public void updateLesson(Lesson lesson,
+                             LessonCallback callback) {
+
+        firestore.collection(FirestoreConstants.LESSONS)
+                .document(lesson.getId())
+                .set(lesson)
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
+    public void deleteLesson(String lessonId,
+                             LessonCallback callback) {
+
+        firestore.collection(FirestoreConstants.LESSONS)
+                .document(lessonId)
+                .delete()
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
     public void getLessons(LessonListCallback callback) {
 
         firestore.collection(FirestoreConstants.LESSONS)

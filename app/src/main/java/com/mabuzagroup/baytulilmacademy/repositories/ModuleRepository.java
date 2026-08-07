@@ -40,6 +40,30 @@ public class ModuleRepository {
                         callback.onFailure(e.getMessage()));
     }
 
+    public void updateModule(Module module,
+                             ModuleCallback callback) {
+
+        firestore.collection(FirestoreConstants.MODULES)
+                .document(module.getId())
+                .set(module)
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
+    public void deleteModule(String moduleId,
+                             ModuleCallback callback) {
+
+        firestore.collection(FirestoreConstants.MODULES)
+                .document(moduleId)
+                .delete()
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
     public void getModules(ModuleListCallback callback) {
 
         firestore.collection(FirestoreConstants.MODULES)

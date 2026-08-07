@@ -3,6 +3,8 @@ package com.mabuzagroup.baytulilmacademy.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,10 +17,22 @@ import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder> {
 
-    private final List<Course> courseList;
+    public interface OnCourseActionListener {
 
-    public CourseAdapter(List<Course> courseList) {
+        void onEdit(Course course);
+
+        void onDelete(Course course);
+
+    }
+
+    private final List<Course> courseList;
+    private final OnCourseActionListener listener;
+
+    public CourseAdapter(List<Course> courseList,
+                         OnCourseActionListener listener) {
+
         this.courseList = courseList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -38,6 +52,33 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         holder.tvTitle.setText(course.getTitle());
         holder.tvDescription.setText(course.getDescription());
+
+        holder.btnMenu.setOnClickListener(v -> {
+
+            PopupMenu popupMenu =
+                    new PopupMenu(v.getContext(), holder.btnMenu);
+
+            popupMenu.inflate(R.menu.item_options_menu);
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+
+                if (item.getItemId() == R.id.actionEdit) {
+
+                    listener.onEdit(course);
+                    return true;
+
+                } else if (item.getItemId() == R.id.actionDelete) {
+
+                    listener.onDelete(course);
+                    return true;
+                }
+
+                return false;
+            });
+
+            popupMenu.show();
+
+        });
     }
 
     @Override
@@ -49,12 +90,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
         TextView tvTitle;
         TextView tvDescription;
+        ImageButton btnMenu;
 
         public CourseViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvCourseTitle);
             tvDescription = itemView.findViewById(R.id.tvCourseDescription);
+            btnMenu = itemView.findViewById(R.id.btnMenu);
         }
     }
 }

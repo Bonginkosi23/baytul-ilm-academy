@@ -57,4 +57,28 @@ public class CategoryRepository {
                         callback.onFailure(e.getMessage()));
     }
 
+    public void updateCategory(Category category,
+                               CategoryCallback callback) {
+
+        firestore.collection(FirestoreConstants.CATEGORIES)
+                .document(category.getId())
+                .set(category)
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
+    public void deleteCategory(String categoryId,
+                               CategoryCallback callback) {
+
+        firestore.collection(FirestoreConstants.CATEGORIES)
+                .document(categoryId)
+                .delete()
+                .addOnSuccessListener(unused ->
+                        callback.onSuccess())
+                .addOnFailureListener(e ->
+                        callback.onFailure(e.getMessage()));
+    }
+
 }

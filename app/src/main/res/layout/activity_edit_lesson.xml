@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit Lesson"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <Spinner
+            android:id="@+id/spModule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:id="@+id/etLessonTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Lesson Title"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/etLessonDescription"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="top"
+            android:hint="Lesson Description"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="16dp"/>
+
+        <EditText
+            android:id="@+id/etYoutubeUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="YouTube URL or Video ID"
+            android:layout_marginTop="16dp"/>
+
+        <Button
+            android:id="@+id/btnSaveLesson"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Update Lesson"
+            android:layout_marginTop="24dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

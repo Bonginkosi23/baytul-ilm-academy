@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,75 @@ public class LessonListActivity extends AppCompatActivity {
 
         lessonList = new ArrayList<>();
 
-        adapter = new LessonAdapter(lessonList);
+        adapter = new LessonAdapter(
+
+                lessonList,
+
+                new LessonAdapter.OnLessonActionListener() {
+
+                    @Override
+                    public void onEdit(Lesson lesson) {
+
+                        Intent intent = new Intent(
+                                LessonListActivity.this,
+                                EditLessonActivity.class
+                        );
+
+                        intent.putExtra("lessonId", lesson.getId());
+                        intent.putExtra("moduleId", lesson.getModuleId());
+                        intent.putExtra("lessonTitle", lesson.getTitle());
+                        intent.putExtra("lessonDescription", lesson.getDescription());
+                        intent.putExtra("youtubeUrl", lesson.getYoutubeUrl());
+                        intent.putExtra("createdAt", lesson.getCreatedAt());
+
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onDelete(Lesson lesson) {
+
+                        new AlertDialog.Builder(LessonListActivity.this)
+                                .setTitle("Delete Lesson")
+                                .setMessage("Are you sure you want to delete \"" +
+                                        lesson.getTitle() + "\"?")
+                                .setPositiveButton("Delete", (dialog, which) ->
+
+                                        repository.deleteLesson(
+                                                lesson.getId(),
+
+                                                new LessonRepository.LessonCallback() {
+
+                                                    @Override
+                                                    public void onSuccess() {
+
+                                                        Toast.makeText(
+                                                                LessonListActivity.this,
+                                                                "Lesson deleted successfully!",
+                                                                Toast.LENGTH_SHORT
+                                                        ).show();
+
+                                                        loadLessons();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(String message) {
+
+                                                        Toast.makeText(
+                                                                LessonListActivity.this,
+                                                                message,
+                                                                Toast.LENGTH_LONG
+                                                        ).show();
+                                                    }
+                                                })
+
+                                )
+
+                                .setNegativeButton("Cancel", null)
+                                .show();
+                    }
+                }
+
+        );
 
         recyclerLessons.setLayoutManager(new LinearLayoutManager(this));
         recyclerLessons.setAdapter(adapter);

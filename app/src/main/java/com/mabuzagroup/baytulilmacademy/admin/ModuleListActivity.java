@@ -3,6 +3,7 @@ package com.mabuzagroup.baytulilmacademy.admin;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +47,76 @@ public class ModuleListActivity extends AppCompatActivity {
         );
 
         moduleList = new ArrayList<>();
-        adapter = new ModuleAdapter(moduleList);
+        adapter = new ModuleAdapter(
+
+                moduleList,
+
+                new ModuleAdapter.OnModuleActionListener() {
+
+                    @Override
+                    public void onEdit(Module module) {
+
+                        Intent intent = new Intent(
+                                ModuleListActivity.this,
+                                EditModuleActivity.class
+                        );
+
+                        intent.putExtra("moduleId", module.getId());
+                        intent.putExtra("courseId", module.getCourseId());
+                        intent.putExtra("moduleTitle", module.getTitle());
+                        intent.putExtra("moduleDescription", module.getDescription());
+                        intent.putExtra("createdAt", module.getCreatedAt());
+
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onDelete(Module module) {
+
+                        // We'll implement next
+                        new AlertDialog.Builder(ModuleListActivity.this)
+                                .setTitle("Delete Module")
+                                .setMessage("Are you sure you want to delete \"" +
+                                        module.getTitle() + "\"?")
+                                .setPositiveButton("Delete", (dialog, which) ->
+
+                                        repository.deleteModule(
+                                                module.getId(),
+
+                                                new ModuleRepository.ModuleCallback() {
+
+                                                    @Override
+                                                    public void onSuccess() {
+
+                                                        Toast.makeText(
+                                                                ModuleListActivity.this,
+                                                                "Module deleted successfully!",
+                                                                Toast.LENGTH_SHORT
+                                                        ).show();
+
+                                                        loadModules();
+                                                    }
+
+                                                    @Override
+                                                    public void onFailure(String message) {
+
+                                                        Toast.makeText(
+                                                                ModuleListActivity.this,
+                                                                message,
+                                                                Toast.LENGTH_LONG
+                                                        ).show();
+                                                    }
+                                                })
+
+                                )
+
+                                .setNegativeButton("Cancel", null)
+                                .show();
+
+                    }
+                }
+
+        );
 
         recyclerModules.setLayoutManager(new LinearLayoutManager(this));
         recyclerModules.setAdapter(adapter);

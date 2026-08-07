@@ -11,6 +11,7 @@ import com.mabuzagroup.baytulilmacademy.R;
 import com.mabuzagroup.baytulilmacademy.adapters.CategoryAdapter;
 import com.mabuzagroup.baytulilmacademy.models.Category;
 import com.mabuzagroup.baytulilmacademy.repositories.CategoryRepository;
+import androidx.appcompat.app.AlertDialog;
 
 import android.content.Intent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -50,7 +51,76 @@ public class CategoryListActivity extends AppCompatActivity {
 
         categoryList = new ArrayList<>();
 
-        adapter = new CategoryAdapter(categoryList);
+        adapter = new CategoryAdapter(
+
+                categoryList,
+
+                new CategoryAdapter.OnCategoryActionListener() {
+
+                    @Override
+                    public void onEdit(Category category) {
+
+                        // We'll open EditCategoryActivity here
+                        Intent intent = new Intent(
+                                CategoryListActivity.this,
+                                EditCategoryActivity.class
+                        );
+
+                        intent.putExtra("categoryId", category.getId());
+                        intent.putExtra("categoryName", category.getName());
+                        intent.putExtra("categoryDescription", category.getDescription());
+
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onDelete(Category category) {
+
+                        // We'll delete here
+                        new AlertDialog.Builder(CategoryListActivity.this)
+                                .setTitle("Delete Category")
+                                .setMessage("Are you sure you want to delete \"" +
+                                        category.getName() + "\"?")
+                                .setPositiveButton("Delete", (dialog, which) -> {
+
+                                    repository.deleteCategory(
+                                            category.getId(),
+
+                                            new CategoryRepository.CategoryCallback() {
+
+                                                @Override
+                                                public void onSuccess() {
+
+                                                    Toast.makeText(
+                                                            CategoryListActivity.this,
+                                                            "Category deleted successfully",
+                                                            Toast.LENGTH_SHORT
+                                                    ).show();
+
+                                                    loadCategories();
+                                                }
+
+                                                @Override
+                                                public void onFailure(String message) {
+
+                                                    Toast.makeText(
+                                                            CategoryListActivity.this,
+                                                            message,
+                                                            Toast.LENGTH_LONG
+                                                    ).show();
+                                                }
+                                            });
+
+                                })
+
+                                .setNegativeButton("Cancel", null)
+                                .show();
+
+                    }
+                }
+
+        );
 
         recyclerCategories.setLayoutManager(
                 new LinearLayoutManager(this));

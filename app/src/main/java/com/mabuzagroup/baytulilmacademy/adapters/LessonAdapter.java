@@ -3,7 +3,9 @@ package com.mabuzagroup.baytulilmacademy.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,10 +17,23 @@ import java.util.List;
 
 public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonViewHolder> {
 
-    private final List<Lesson> lessonList;
+    public interface OnLessonActionListener {
 
-    public LessonAdapter(List<Lesson> lessonList) {
+        void onEdit(Lesson lesson);
+
+        void onDelete(Lesson lesson);
+
+    }
+
+    private final List<Lesson> lessonList;
+    private final OnLessonActionListener listener;
+
+    public LessonAdapter(
+            List<Lesson> lessonList,
+            OnLessonActionListener listener) {
+
         this.lessonList = lessonList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,6 +59,33 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
         } else {
             holder.tvYoutube.setText("▶ Video Available");
         }
+
+        holder.btnMenu.setOnClickListener(v -> {
+
+            PopupMenu popupMenu =
+                    new PopupMenu(v.getContext(), holder.btnMenu);
+
+            popupMenu.inflate(R.menu.item_options_menu);
+
+            popupMenu.setOnMenuItemClickListener(item -> {
+
+                if (item.getItemId() == R.id.actionEdit) {
+
+                    listener.onEdit(lesson);
+                    return true;
+
+                } else if (item.getItemId() == R.id.actionDelete) {
+
+                    listener.onDelete(lesson);
+                    return true;
+                }
+
+                return false;
+            });
+
+            popupMenu.show();
+
+        });
     }
 
     @Override
@@ -52,6 +94,8 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
     }
 
     static class LessonViewHolder extends RecyclerView.ViewHolder {
+
+        ImageButton btnMenu;
 
         TextView tvTitle;
         TextView tvDescription;
@@ -63,6 +107,7 @@ public class LessonAdapter extends RecyclerView.Adapter<LessonAdapter.LessonView
             tvTitle = itemView.findViewById(R.id.tvLessonTitle);
             tvDescription = itemView.findViewById(R.id.tvLessonDescription);
             tvYoutube = itemView.findViewById(R.id.tvYoutube);
+            btnMenu = itemView.findViewById(R.id.btnMenu);
         }
     }
 }
